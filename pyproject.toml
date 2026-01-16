@@ -10,6 +10,7 @@ dependencies = [
     "mat4py",
     "matplotlib",
     "numpy",
+    "psutil",
     "PyPrind",
     "scipy",
     "torch",
