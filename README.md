@@ -32,14 +32,12 @@ pip install -e .
 
 This will install all required dependencies including:
 * [PyTorch](https://github.com/pytorch/pytorch) - for learning input-output data
-* [torchvision](https://github.com/pytorch/vision) - PyTorch vision library
 * [SciPy](https://www.scipy.org/) - for curve fitting
 * [NumPy](https://numpy.org/) - for numerical computations
 * [matplotlib](https://matplotlib.org/) - for plotting
 * [PyPrind](https://github.com/rasbt/pyprind) - for progress indicators
 * [mat4py](https://pypi.org/project/mat4py/) - for MATLAB data export
 * [joblib](https://joblib.readthedocs.io/) - for parallel processing
-* [psutil](https://github.com/giampaolo/psutil) - for system monitoring
 
 ## Prerequisites
 * The [TCN](https://github.com/locuslab/TCN) model is a neural network variant used by the framework, however it is included within the code.
