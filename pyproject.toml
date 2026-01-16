@@ -1,0 +1,25 @@
+[project]
+name = "eqn-gen-copilot"
+version = "1.0.0"
+description = "A framework for generating discrete dynamical system equations from input-output data"
+readme = "README.md"
+requires-python = ">=3.7"
+license = {file = "LICENSE"}
+dependencies = [
+    "joblib",
+    "mat4py",
+    "matplotlib",
+    "numpy",
+    "psutil",
+    "PyPrind",
+    "scipy",
+    "torch",
+    "torchvision",
+]
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["lib"]
