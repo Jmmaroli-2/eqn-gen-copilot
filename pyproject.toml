@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eqn-gen-copilot"
+version = "0.0.0"
+description = "Framework for generating discrete dynamical system equations from input-output data."
+readme = "README.md"
+requires-python = ">=3.8,<3.14"
+dependencies = [
+  "numpy",
+  "scipy",
+  "torch",
+  "mat4py",
+  "pyprind",
+]
