@@ -16,6 +16,11 @@ def tune_model(tuning_parameters, model_function, input_data, output_data):
     generation_count = tuning_parameters["GA_generations"]
     visual = tuning_parameters["visual"]
     save_visual = tuning_parameters["save_visual"]
+    seed = tuning_parameters.get("seed", 1111)
+    
+    # Set random seeds for reproducibility
+    random.seed(seed)
+    np.random.seed(seed)
     
     if save_visual == True:
         # Setup the most recent analysis directory to store GA tuning metrics.
