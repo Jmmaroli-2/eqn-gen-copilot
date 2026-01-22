@@ -30,6 +30,12 @@ python -m venv venv
 pip install -e .
 ```
 
+Optional - install CUDA support for GPU
+```bash
+pip uninstall -y torch
+pip install torch --index-url https://download.pytorch.org/whl/cu124
+```
+
 This will install all required dependencies including:
 * [PyTorch](https://github.com/pytorch/pytorch) - for learning input-output data
 * [SciPy](https://www.scipy.org/) - for curve fitting
