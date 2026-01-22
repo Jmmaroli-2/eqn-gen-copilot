@@ -150,7 +150,7 @@ def create_model(model_parameters, inputData, outputData, inputMask=1):
         Y_test = Y_test.cuda()
         mu_y_t = mu_y_t.cuda()
         sig_y_t = sig_y_t.cuda()
-    elif cuda and not torch.cuda.is_available():
+    elif cuda:
         print("WARNING: CUDA requested but not available. Falling back to CPU.")
         cuda = False
 
