@@ -142,7 +142,7 @@ def create_model(model_parameters, inputData, outputData, inputMask=1):
     Y_test = torch.tensor((Y_test-mu_y)/sig_y,dtype=torch.float)
 
     # Move data to the GPU if one is present.
-    if cuda:
+    if cuda and torch.cuda.is_available():
         model.cuda()
         X_train = X_train.cuda()
         Y_train = Y_train.cuda()
@@ -150,6 +150,9 @@ def create_model(model_parameters, inputData, outputData, inputMask=1):
         Y_test = Y_test.cuda()
         mu_y_t = mu_y_t.cuda()
         sig_y_t = sig_y_t.cuda()
+    elif cuda and not torch.cuda.is_available():
+        print("WARNING: CUDA requested but not available. Falling back to CPU.")
+        cuda = False
 
     # Define the training function.
     optimizer = getattr(optim, optimizer)(model.parameters(), lr=lr)
