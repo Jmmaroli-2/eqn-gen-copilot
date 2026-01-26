@@ -42,6 +42,13 @@ def tune_model(tuning_parameters, model_function, input_data, output_data):
             upper_bounds.extend(product_function["function"]["upper"])
             lower_bounds.extend(product_function["function"]["lower"])
             parameters.extend(product_function["parameters"])
+        
+        # Skip genetic algorithm if there are no parameters to tune.
+        if parameter_count == 0:
+            print("Tuning channel " + str(channel_id+1) + "...")
+            print("No tunable parameters found for this channel, skipping genetic algorithm.")
+            print()
+            continue
             
         # Create the initial population of parameters.
         population = np.random.rand(population_size, parameter_count)
