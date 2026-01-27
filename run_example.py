@@ -20,8 +20,8 @@ if __name__ == "__main__":
         print("Usage: python run_example.py # [--html-report]\n")
     else:
         EXAMPLE = int(sys.argv[1])
-        # Check for --html-report flag
-        if len(sys.argv) > 2 and sys.argv[2] == '--html-report':
+        # Check for --html-report flag anywhere in arguments
+        if '--html-report' in sys.argv:
             generate_html = True
             print("HTML report generation enabled")
     print("Running example number {:d}...\n".format(EXAMPLE))
