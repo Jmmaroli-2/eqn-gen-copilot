@@ -439,11 +439,12 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                         plt.figure()
                         plt.scatter(x_data_fit[0], y_data_fit, marker='.', label='Data')
                         # Plot the fitted function
-                        if product_function["function"] != None and len(product_function["parameters"]) > 0:
+                        y_fit_1d = None
+                        if product_function["function"] is not None and len(product_function["parameters"]) > 0:
                             x_sorted_indices = np.argsort(x_data_fit[0])
                             x_sorted = x_data_fit[0][x_sorted_indices]
-                            y_fit = product_function["function"]["fcn"](x_data_fit, *product_function["parameters"])
-                            y_fit_sorted = y_fit[x_sorted_indices]
+                            y_fit_1d = product_function["function"]["fcn"](x_data_fit, *product_function["parameters"])
+                            y_fit_sorted = y_fit_1d[x_sorted_indices]
                             plt.plot(x_sorted, y_fit_sorted, 'r-', linewidth=2, label='Fitted function')
                         plt.title(product_function["template_string"])
                         plt.xlabel(f_list[0])
@@ -453,8 +454,8 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                                         product_function["template_string"]))
                             pltDict = {"x": x_data_fit[0].tolist(),
                                    "y": y_data_fit.tolist()}
-                            if product_function["function"] != None and len(product_function["parameters"]) > 0:
-                                pltDict["y_fit"] = y_fit.tolist()
+                            if y_fit_1d is not None:
+                                pltDict["y_fit"] = y_fit_1d.tolist()
                             mat4py.savemat('./output/analysis_{}/{}.mat'.format(analysis_dir_count, \
                                            product_function["template_string"]), pltDict)
                         if visual == True: plt.show()
@@ -463,9 +464,10 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                         ax = plt.axes(projection='3d')
                         ax.scatter3D(x_data_fit[0], x_data_fit[1], y_data_fit, c=y_data_fit, marker='o', label='Data')
                         # Plot the fitted function surface
-                        if product_function["function"] != None and len(product_function["parameters"]) > 0:
-                            y_fit = product_function["function"]["fcn"](x_data_fit, *product_function["parameters"])
-                            ax.plot_trisurf(x_data_fit[0], x_data_fit[1], y_fit, alpha=0.5, color='red', label='Fitted function')
+                        y_fit_2d = None
+                        if product_function["function"] is not None and len(product_function["parameters"]) > 0:
+                            y_fit_2d = product_function["function"]["fcn"](x_data_fit, *product_function["parameters"])
+                            ax.plot_trisurf(x_data_fit[0], x_data_fit[1], y_fit_2d, alpha=0.5, color='red', label='Fitted function')
                         ax.set_title(product_function["template_string"])
                         ax.set_xlabel(f_list[0])
                         ax.set_ylabel(f_list[1])
@@ -476,8 +478,8 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             pltDict = {"x": x_data_fit[0].tolist(),
                                    "y": x_data_fit[1].tolist(),
                                    "z": y_data_fit.tolist()}
-                            if product_function["function"] != None and len(product_function["parameters"]) > 0:
-                                pltDict["z_fit"] = y_fit.tolist()
+                            if y_fit_2d is not None:
+                                pltDict["z_fit"] = y_fit_2d.tolist()
                             mat4py.savemat('./output/analysis_{}/{}.mat'.format(analysis_dir_count, \
                                            product_function["template_string"]), pltDict)
                         if visual == True: plt.show()
