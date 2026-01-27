@@ -85,7 +85,7 @@ def tune_model(tuning_parameters, model_function, input_data, output_data):
             population[0, :] = population[member_rank[0]]
             top_heuristic[generation_id] = heuristic[member_rank[0]]
             for member_id in range(1, population_size):
-                parents = np.random.sample(list(upper_rank), k=2)
+                parents = np.random.choice(upper_rank, size=2, replace=False)
                 crossover_point = np.random.randint(0,parameter_count)
                 child = np.concatenate((population[parents[0], :crossover_point], population[parents[1], crossover_point:]))
                 population[member_id, :] = child
@@ -120,7 +120,9 @@ def tune_model(tuning_parameters, model_function, input_data, output_data):
             plt.title('Top MAE vs Generation')
             plt.xlabel('Generation')
             plt.ylabel('MAE')
-            if save_visual == True: plt.savefig('./output/analysis_{}/ga_mae.pdf'.format(analysis_dir_count))
+            if save_visual == True:
+                plt.savefig('./output/analysis_{}/ga_mae.pdf'.format(analysis_dir_count))
+                plt.savefig('./output/analysis_{}/ga_mae.png'.format(analysis_dir_count), dpi=150, bbox_inches='tight')
             if visual == True: plt.show()
         
     return model_function_tuned

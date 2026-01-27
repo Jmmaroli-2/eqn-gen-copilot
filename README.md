@@ -51,8 +51,8 @@ This will install all required dependencies including:
 
 ## Usage
 The framework is implemented as a single function
-```
-estimate_equation(model_parameters, analysis_parameters, input_data, output_data)
+```python
+estimate_equation(model_parameters, analysis_parameters, input_data, output_data, generate_html_report=False)
 ```
 This function takes a number of settings defined in the model_parameters and analysis_parameters dictionaries. The input and output data are simply 2D numpy arrays in the form
 ```
@@ -66,8 +66,27 @@ output_data = |y1[k-N] y2[k-N] y3[k-N]   ...  |
 ```
 where N is the number of samples. The data is simply arranged so that the last row is the most recent data and the first row is the initial data.
 
-A script called run_example.py is provided with 10 examples. Examples are run using
+### HTML Report Generation
+Set `generate_html_report=True` to automatically generate an HTML report containing all terminal output and embedded plots. The report will be saved to `./output/report.html`.
+
+```python
+estimate_equation(model_parameters, analysis_parameters, input_data, output_data, generate_html_report=True)
 ```
+
+The HTML report includes:
+- All terminal output in a styled, readable format
+- All generated plots embedded directly as images (no need to open separate PDF files)
+- Professional styling with responsive design
+- Timestamp of generation
+
+Both PDF and PNG versions of plots are saved to the output directory. The HTML report uses the PNG versions for inline embedding.
+
+A script called run_example.py is provided with 10 examples. Examples are run using
+```bash
 python run_example.py #
 ```
-where # indicates the example (indexed 0-9). This script contains everything needed to use the framework and is a simple starting point for analyzing data of your own.
+where # indicates the example (indexed 0-9). To generate an HTML report, add the `--html-report` flag:
+```bash
+python run_example.py # --html-report
+```
+This script contains everything needed to use the framework and is a simple starting point for analyzing data of your own.
