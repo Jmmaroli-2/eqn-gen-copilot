@@ -2,6 +2,9 @@
 
 import numpy as np
 
+# Number of input variables
+x_dim = 1
+
 def fcn_sin_1(x,a,b,c):
     return a*np.sin(b*x[0]+c)-a*np.sin(c)
 

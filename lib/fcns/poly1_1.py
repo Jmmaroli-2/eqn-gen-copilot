@@ -2,6 +2,9 @@
 
 import numpy as np
 
+# Number of input variables
+x_dim = 1
+
 def fcn_poly1_1(x,a):
     return a*x[0]
 

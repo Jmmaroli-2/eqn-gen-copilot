@@ -2,6 +2,9 @@
 
 import numpy as np
 
+# Number of input variables
+x_dim = 2
+
 def fcn_exp_lin21_2(x,a):
     return a*x[1]*(np.exp(x[0])-1)
 

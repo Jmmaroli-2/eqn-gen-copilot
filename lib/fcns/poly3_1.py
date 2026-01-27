@@ -2,6 +2,9 @@
 
 import numpy as np
 
+# Number of input variables
+x_dim = 1
+
 def fcn_poly3_1(x,a,b,c):
     return a*pow(x[0],3) \
          + b*pow(x[0],2) \

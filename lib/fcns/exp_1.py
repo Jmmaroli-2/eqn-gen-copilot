@@ -2,6 +2,9 @@
 
 import numpy as np
 
+# Number of input variables
+x_dim = 1
+
 def fcn_exp_1(x,a,b):
     return a*(np.exp(b*x[0])-1)
 

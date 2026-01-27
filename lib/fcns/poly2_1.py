@@ -2,6 +2,9 @@
 
 import numpy as np
 
+# Number of input variables
+x_dim = 1
+
 def fcn_poly2_1(x,a,b):
     return a*pow(x[0],2) \
          + b*x[0]

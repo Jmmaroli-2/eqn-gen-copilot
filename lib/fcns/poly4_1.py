@@ -2,6 +2,9 @@
 
 import numpy as np
 
+# Number of input variables
+x_dim = 1
+
 def fcn_poly4_1(x,a,b,c,d):
     return a*pow(x[0],4) \
          + b*pow(x[0],3) \

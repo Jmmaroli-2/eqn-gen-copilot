@@ -2,6 +2,9 @@
 
 import numpy as np
 
+# Number of input variables
+x_dim = 2
+
 def fcn_poly55_2(x,a,b,c,d,e,f,g,h,i,j):
     return a*pow(x[0],1)*pow(x[1],1) \
          + b*pow(x[0],2)*pow(x[1],1) \

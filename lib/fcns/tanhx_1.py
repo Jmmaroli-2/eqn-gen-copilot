@@ -2,6 +2,9 @@
 
 import numpy as np
 
+# Number of input variables
+x_dim = 1
+
 def fcn_tanhx_1(x,a,b,c,d):
     return a*np.tanh(b*(x[0]+c)) + d*(x[0]+c) - (a*np.tanh(b*c)+d*c)
 

@@ -2,6 +2,9 @@
 
 import numpy as np
 
+# Number of input variables
+x_dim = 1
+
 def fcn_poly5_1(x,a,b,c,d,e):
     return a*pow(x[0],5) \
          + b*pow(x[0],4) \

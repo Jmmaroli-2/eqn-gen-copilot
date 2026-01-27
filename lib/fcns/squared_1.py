@@ -2,6 +2,9 @@
 
 import numpy as np
 
+# Number of input variables
+x_dim = 1
+
 def fcn_squared_1(x,a):
     return a*pow(x[0],2)
 

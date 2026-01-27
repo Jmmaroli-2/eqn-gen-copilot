@@ -2,6 +2,9 @@
 
 import numpy as np
 
+# Number of input variables
+x_dim = 5
+
 def fcn_linear_5(x,a):
     return a*x[0]*x[1]*x[2]*x[3]*x[4]
 
