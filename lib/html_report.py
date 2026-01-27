@@ -118,45 +118,55 @@ class HTMLReportGenerator:
     def _generate_html_template(self, terminal_output, plot_files, output_dir):
         """Generate the HTML template with styling and content"""
         
-        # Convert PDF plots to images or provide links
+        # Group files by base name, preferring PNG over PDF
+        plot_dict = {}
+        for plot_file in plot_files:
+            base_name = os.path.splitext(plot_file)[0]
+            ext = os.path.splitext(plot_file)[1].lower()
+            
+            # Skip PDF if PNG exists with same base name
+            if base_name not in plot_dict:
+                plot_dict[base_name] = plot_file
+            elif ext == '.png':
+                # Prefer PNG over PDF
+                plot_dict[base_name] = plot_file
+            elif ext in ['.jpg', '.jpeg'] and not plot_dict[base_name].endswith('.png'):
+                # Prefer JPG/JPEG over PDF but not over PNG
+                plot_dict[base_name] = plot_file
+        
+        # Generate HTML for plots - embed all images directly
         plot_html = ""
-        if plot_files:
+        if plot_dict:
             plot_html = "<h2>Generated Plots</h2>\n"
-            for plot_file in sorted(plot_files):
-                rel_path = os.path.relpath(plot_file, output_dir)
+            for plot_file in sorted(plot_dict.values()):
                 file_name = os.path.basename(plot_file)
                 
-                # For PDFs, provide a link
-                if plot_file.endswith('.pdf'):
+                # Embed all image formats
+                try:
+                    with open(plot_file, 'rb') as f:
+                        img_data = base64.b64encode(f.read()).decode('utf-8')
+                        # Determine MIME type based on file extension
+                        if plot_file.endswith('.jpg') or plot_file.endswith('.jpeg'):
+                            mime_type = 'image/jpeg'
+                        elif plot_file.endswith('.png'):
+                            mime_type = 'image/png'
+                        else:
+                            # For PDF or other formats, skip embedding
+                            continue
+                        
+                        plot_html += f'''
+                        <div class="plot-container">
+                            <h3>{file_name.replace('.png', '').replace('.jpg', '').replace('.jpeg', '')}</h3>
+                            <img src="data:{mime_type};base64,{img_data}" alt="{file_name}" />
+                        </div>
+                        '''
+                except Exception as e:
                     plot_html += f'''
                     <div class="plot-container">
                         <h3>{file_name}</h3>
-                        <p><a href="{rel_path}" target="_blank">View PDF Plot: {file_name}</a></p>
+                        <p>Error loading image: {str(e)}</p>
                     </div>
                     '''
-                else:
-                    # For images, embed them
-                    try:
-                        with open(plot_file, 'rb') as f:
-                            img_data = base64.b64encode(f.read()).decode('utf-8')
-                            # Determine MIME type based on file extension
-                            if plot_file.endswith('.jpg') or plot_file.endswith('.jpeg'):
-                                mime_type = 'image/jpeg'
-                            else:
-                                mime_type = 'image/png'
-                            plot_html += f'''
-                            <div class="plot-container">
-                                <h3>{file_name}</h3>
-                                <img src="data:{mime_type};base64,{img_data}" alt="{file_name}" />
-                            </div>
-                            '''
-                    except Exception as e:
-                        plot_html += f'''
-                        <div class="plot-container">
-                            <h3>{file_name}</h3>
-                            <p>Error loading image: {str(e)}</p>
-                        </div>
-                        '''
         
         # Generate timestamp
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

@@ -120,7 +120,9 @@ def tune_model(tuning_parameters, model_function, input_data, output_data):
             plt.title('Top MAE vs Generation')
             plt.xlabel('Generation')
             plt.ylabel('MAE')
-            if save_visual == True: plt.savefig('./output/analysis_{}/ga_mae.pdf'.format(analysis_dir_count))
+            if save_visual == True:
+                plt.savefig('./output/analysis_{}/ga_mae.pdf'.format(analysis_dir_count))
+                plt.savefig('./output/analysis_{}/ga_mae.png'.format(analysis_dir_count), dpi=150, bbox_inches='tight')
             if visual == True: plt.show()
         
     return model_function_tuned

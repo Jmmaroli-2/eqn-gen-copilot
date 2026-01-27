@@ -229,7 +229,9 @@ def create_model(model_parameters, inputData, outputData, inputMask=1):
         plt.xlabel('Epoch')
         plt.ylabel('MSE Loss')
         ax.set_yscale("log", nonpositive='clip')
-        if save_visual == True: plt.savefig('./output/model_{}/loss.pdf'.format(model_dir_count))
+        if save_visual == True:
+            plt.savefig('./output/model_{}/loss.pdf'.format(model_dir_count))
+            plt.savefig('./output/model_{}/loss.png'.format(model_dir_count), dpi=150, bbox_inches='tight')
         if visual == True: plt.show()
     print("Min train: epoch " + str(np.argmin(trainLossHistory)+1))
     print("Min test: epoch " + str(np.argmin(testLossHistory)+1))
