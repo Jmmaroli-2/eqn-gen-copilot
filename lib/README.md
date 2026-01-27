@@ -5,30 +5,46 @@ This document lists all the template fitting functions (`fcn_` functions) availa
 ## Polynomial Functions (1 variable)
 
 ### fcn_poly1_1(x, a)
-Linear function: $ax_0$
+Linear function:
+
+$$ax_0$$
 
 ### fcn_poly2_1(x, a, b)
-Quadratic polynomial: $ax_0^2 + bx_0$
+Quadratic polynomial:
+
+$$ax_0^2 + bx_0$$
 
 ### fcn_squared_1(x, a)
-Pure squared term: $ax_0^2$
+Pure squared term:
+
+$$ax_0^2$$
 
 ### fcn_poly3_1(x, a, b, c)
-Cubic polynomial: $ax_0^3 + bx_0^2 + cx_0$
+Cubic polynomial:
+
+$$ax_0^3 + bx_0^2 + cx_0$$
 
 ### fcn_cubed_1(x, a)
-Pure cubic term: $ax_0^3$
+Pure cubic term:
+
+$$ax_0^3$$
 
 ### fcn_poly4_1(x, a, b, c, d)
-Quartic polynomial: $ax_0^4 + bx_0^3 + cx_0^2 + dx_0$
+Quartic polynomial:
+
+$$ax_0^4 + bx_0^3 + cx_0^2 + dx_0$$
 
 ### fcn_poly5_1(x, a, b, c, d, e)
-Quintic polynomial: $ax_0^5 + bx_0^4 + cx_0^3 + dx_0^2 + ex_0$
+Quintic polynomial:
+
+$$ax_0^5 + bx_0^4 + cx_0^3 + dx_0^2 + ex_0$$
 
 ## Polynomial Functions (2 variables)
 
 ### fcn_poly22_2(x, a)
-Bilinear term: $ax_0x_1$
+Bilinear term:
+
+$$ax_0x_1$$
 
 ### fcn_poly33_2(x, a, b, c)
 Second-order bivariate polynomial:
@@ -53,32 +69,48 @@ $$
 ## Multilinear Functions
 
 ### fcn_linear_3(x, a)
-Three-variable product: $ax_0x_1x_2$
+Three-variable product:
+
+$$ax_0x_1x_2$$
 
 ### fcn_linear_4(x, a)
-Four-variable product: $ax_0x_1x_2x_3$
+Four-variable product:
+
+$$ax_0x_1x_2x_3$$
 
 ### fcn_linear_5(x, a)
-Five-variable product: $ax_0x_1x_2x_3x_4$
+Five-variable product:
+
+$$ax_0x_1x_2x_3x_4$$
 
 ## Exponential Functions
 
 ### fcn_exp_1(x, a, b)
-Exponential function: $a(e^{bx_0} - 1)$
+Exponential function:
+
+$$a(e^{bx_0} - 1)$$
 
 ### fcn_exp_lin12_2(x, a)
-Linear-exponential product: $ax_0(e^{x_1} - 1)$
+Linear-exponential product:
+
+$$ax_0(e^{x_1} - 1)$$
 
 ### fcn_exp_lin21_2(x, a)
-Linear-exponential product (reversed): $ax_1(e^{x_0} - 1)$
+Linear-exponential product (reversed):
+
+$$ax_1(e^{x_0} - 1)$$
 
 ## Trigonometric and Hyperbolic Functions
 
 ### fcn_sin_1(x, a, b, c)
-Sinusoidal function: $a\sin(bx_0 + c) - a\sin(c)$
+Sinusoidal function:
+
+$$a\sin(bx_0 + c) - a\sin(c)$$
 
 ### fcn_tanh_1(x, a, b)
-Hyperbolic tangent: $a\tanh(bx_0)$
+Hyperbolic tangent:
+
+$$a\tanh(bx_0)$$
 
 ### fcn_tanhx_1(x, a, b, c, d)
 Extended hyperbolic tangent with linear term:
