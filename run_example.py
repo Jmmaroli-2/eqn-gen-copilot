@@ -1,5 +1,5 @@
 # Test the analysis framework on synthetic and real examples.
-# Usage: python run_example.py #
+# Usage: python run_example.py # [--html-report]
 
 import math
 import sys
@@ -11,13 +11,19 @@ from estimate_equation import estimate_equation
 
 if __name__ == "__main__":
     
+    # Parse command line arguments
+    generate_html = False
     if len(sys.argv) == 1:
         # Manually set example (for running in Spyder console).
         # If running in Spyder console, set visual to True.
         EXAMPLE = 1
-        print("Usage: python run_example.py #\n")
+        print("Usage: python run_example.py # [--html-report]\n")
     else:
         EXAMPLE = int(sys.argv[1])
+        # Check for --html-report flag
+        if len(sys.argv) > 2 and sys.argv[2] == '--html-report':
+            generate_html = True
+            print("HTML report generation enabled")
     print("Running example number {:d}...\n".format(EXAMPLE))
 
     model_parameters = {
@@ -436,4 +442,4 @@ if __name__ == "__main__":
                       sort_keys=True) + "\n")
 
     # Estimate the equation using input-output data.
-    estimate_equation(model_parameters, analysis_parameters, input_data, output_data)
+    estimate_equation(model_parameters, analysis_parameters, input_data, output_data, generate_html_report=generate_html)

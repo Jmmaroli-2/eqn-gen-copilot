@@ -7,10 +7,11 @@ from lib.create_model import create_model
 from lib.analyze_model import analyze_model
 from lib.evaluate_function import evaluate_function
 from lib.tune_model import tune_model
+from lib.html_report import HTMLReportGenerator
 
 FORMAT = '%.3e'
 
-def estimate_equation(model_parameters, analysis_parameters, input_data, output_data):
+def estimate_equation_core(model_parameters, analysis_parameters, input_data, output_data):
 
     sweep_initial = analysis_parameters["sweep_initial"]
     sweep_detailed = analysis_parameters["sweep_detailed"]
@@ -194,3 +195,33 @@ def estimate_equation(model_parameters, analysis_parameters, input_data, output_
                     y_str = y_str + " + "
         print(y_str)
         print()
+
+
+def estimate_equation(model_parameters, analysis_parameters, input_data, output_data, generate_html_report=False):
+    """
+    Wrapper function for estimate_equation_core that optionally generates HTML reports.
+    
+    Args:
+        model_parameters: Dictionary of model training parameters
+        analysis_parameters: Dictionary of analysis parameters
+        input_data: Input data array
+        output_data: Output data array
+        generate_html_report: If True, generates an HTML report with all terminal output and plots
+    
+    Returns:
+        None, but generates HTML report if generate_html_report=True
+    """
+    if generate_html_report:
+        # Create HTML report generator
+        html_generator = HTMLReportGenerator()
+        
+        # Capture all output
+        with html_generator.capture_output():
+            estimate_equation_core(model_parameters, analysis_parameters, input_data, output_data)
+        
+        # Generate the HTML report
+        html_generator.generate_html_report()
+    else:
+        # Run without HTML report
+        estimate_equation_core(model_parameters, analysis_parameters, input_data, output_data)
+
