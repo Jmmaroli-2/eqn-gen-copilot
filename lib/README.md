@@ -43,7 +43,12 @@ $$ax_0x_1 + bx_0^2x_1 + cx_0x_1^2 + dx_0^3x_1 + ex_0^2x_1^2 + fx_0x_1^3$$
 ### fcn_poly55_2(x, a, b, c, d, e, f, g, h, i, j)
 Fourth-order bivariate polynomial:
 
-$$ax_0x_1 + bx_0^2x_1 + cx_0x_1^2 + dx_0^3x_1 + ex_0^2x_1^2 + fx_0x_1^3 + gx_0^4x_1 + hx_0^3x_1^2 + ix_0^2x_1^3 + jx_0x_1^4$$
+$$
+\begin{align*}
+&ax_0x_1 + bx_0^2x_1 + cx_0x_1^2 + dx_0^3x_1 + ex_0^2x_1^2 \\
+&+ fx_0x_1^3 + gx_0^4x_1 + hx_0^3x_1^2 + ix_0^2x_1^3 + jx_0x_1^4
+\end{align*}
+$$
 
 ## Multilinear Functions
 
