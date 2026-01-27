@@ -69,6 +69,14 @@ def create_model(model_parameters, inputData, outputData, inputMask=1):
 
     torch.manual_seed(seed)
     
+    # Set additional seeds for reproducibility
+    if cuda:
+        torch.cuda.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+        # Make CUDA operations deterministic
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+    
     # Get the current data output folder if saving data and plots.
     if save_visual:
         if not os.path.exists('./output'):
@@ -143,13 +151,21 @@ def create_model(model_parameters, inputData, outputData, inputMask=1):
 
     # Move data to the GPU if one is present.
     if cuda:
-        model.cuda()
-        X_train = X_train.cuda()
-        Y_train = Y_train.cuda()
-        X_test = X_test.cuda()
-        Y_test = Y_test.cuda()
-        mu_y_t = mu_y_t.cuda()
-        sig_y_t = sig_y_t.cuda()
+        print("CUDA specified in model parameters.")
+        if torch.cuda.is_available():
+            model.cuda()
+            X_train = X_train.cuda()
+            Y_train = Y_train.cuda()
+            X_test = X_test.cuda()
+            Y_test = Y_test.cuda()
+            mu_y_t = mu_y_t.cuda()
+            sig_y_t = sig_y_t.cuda()
+            print("Model moved to GPU.")
+        else:
+            print("WARNING: GPU unavailable, model will run on the CPU.")
+            cuda = False
+    else:
+        print("CUDA not specified, model will run on the CPU.")
 
     # Define the training function.
     optimizer = getattr(optim, optimizer)(model.parameters(), lr=lr)
@@ -212,7 +228,7 @@ def create_model(model_parameters, inputData, outputData, inputMask=1):
         plt.title('Training and Test Loss')
         plt.xlabel('Epoch')
         plt.ylabel('MSE Loss')
-        ax.set_yscale("log", nonposy='clip')
+        ax.set_yscale("log", nonpositive='clip')
         if save_visual == True: plt.savefig('./output/model_{}/loss.pdf'.format(model_dir_count))
         if visual == True: plt.show()
     print("Min train: epoch " + str(np.argmin(trainLossHistory)+1))
