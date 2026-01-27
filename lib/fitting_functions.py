@@ -2,6 +2,7 @@
 # This file dynamically imports all template product functions from the fcns folder.
 
 import os
+import sys
 import importlib
 from collections import defaultdict
 
@@ -35,7 +36,6 @@ def fitting_functions():
                 # Get x_dim from the module
                 x_dim = getattr(module, 'x_dim', None)
                 if x_dim is None:
-                    import sys
                     print(f"Warning: Module {module_name} does not define x_dim, skipping", file=sys.stderr)
                     continue
                 
@@ -49,13 +49,11 @@ def fitting_functions():
                         break  # Only one dct per module
                 
                 if not dct_found:
-                    import sys
                     print(f"Warning: Module {module_name} does not define dct_*, skipping", file=sys.stderr)
                     
             except Exception as e:
                 # If a module fails to import, log the error but continue
                 # This prevents one broken module from breaking the entire system
-                import sys
                 print(f"Warning: Failed to import module {module_name}: {e}", file=sys.stderr)
     
     # Convert defaultdict to regular dict for the return value
