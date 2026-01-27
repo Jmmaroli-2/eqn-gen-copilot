@@ -24,12 +24,18 @@ def fitting_functions():
     for filename in os.listdir(fcns_dir):
         if filename.endswith('.py') and filename != '__init__.py':
             module_name = filename[:-3]  # Remove .py extension
-            module = importlib.import_module(f'.fcns.{module_name}', package='lib')
-            
-            # Look for dct_* variable in the module
-            for attr_name in dir(module):
-                if attr_name.startswith('dct_'):
-                    dct_dict[attr_name] = getattr(module, attr_name)
+            try:
+                module = importlib.import_module(f'.fcns.{module_name}', package='lib')
+                
+                # Look for dct_* variable in the module
+                for attr_name in dir(module):
+                    if attr_name.startswith('dct_'):
+                        dct_dict[attr_name] = getattr(module, attr_name)
+            except Exception as e:
+                # If a module fails to import, log the error but continue
+                # This prevents one broken module from breaking the entire system
+                import sys
+                print(f"Warning: Failed to import module {module_name}: {e}", file=sys.stderr)
     
     # Extract the dictionaries we need (maintaining order)
     dct_poly1_1 = dct_dict.get('dct_poly1_1')
