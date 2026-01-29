@@ -57,12 +57,12 @@ def estimate_equation(model_parameters, analysis_parameters, input_data, output_
     for c in range(0, len(metrics_v2)):
         if metrics_v2[c]["MAE"] < metrics_v1[c]["MAE"]:
             print("Channel y" + str(c+1) + " improved")
-            print("Using function from masked model")
+            print("Continuing with function from masked model")
             model_function_v3.append(model_function_v2[c])
             metrics_v3.append(metrics_v2[c])
         else:
             print("Channel y" + str(c+1) + " did not improve")
-            print("Using function from initial model")
+            print("Continuing with function from previous model")
             model_function_v3.append(model_function_v1[c])
             metrics_v3.append(metrics_v1[c])
         print("MAE  : " + str(FORMAT%metrics_v1[c]["MAE"]) + " -> " + str(FORMAT%metrics_v2[c]["MAE"]))
@@ -131,11 +131,13 @@ def estimate_equation(model_parameters, analysis_parameters, input_data, output_
                 if metrics_v2[c]["MAE"] < metrics_v1[c]["MAE"]:
                     # Retrained model results are better.
                     print("Channel y" + str(c+1) + " improved")
+                    print("Continuing with function from masked model")
                     model_function_v3.append(model_function_v2[c])
                     metrics_v3.append(metrics_v2[c])
                 else:
                     # Initial model results are better.
                     print("Channel y" + str(c+1) + " did not improve")
+                    print("Continuing with function from previous model")
                     model_function_v3.append(model_function_v1[c])
                     metrics_v3.append(metrics_v1[c])
                 print("MAE  : " + str(FORMAT%metrics_v1[c]["MAE"]) + " -> " + str(FORMAT%metrics_v2[c]["MAE"]))
@@ -176,10 +178,12 @@ def estimate_equation(model_parameters, analysis_parameters, input_data, output_
     for c in range(0,len(metrics_v4)):
         if metrics_v4[c]["MAE"] < metrics_v3[c]["MAE"]:
             print("Channel y" + str(c+1) + " improved")
+            print("Using GA-tuned function")
             model_function_v5.append(model_function_v4[c])
             metrics_v5.append(metrics_v4[c])
         else:
             print("Channel y" + str(c+1) + " did not improve")
+            print("Using untuned function")
             model_function_v5.append(model_function_v3[c])
             metrics_v5.append(metrics_v3[c])
         print("MAE  : " + str(FORMAT%metrics_v3[c]["MAE"]) + " -> " + str(FORMAT%metrics_v4[c]["MAE"]))
