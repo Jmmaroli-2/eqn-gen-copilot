@@ -431,9 +431,9 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             if save_visual == True:
                                 plt.savefig('./output/analysis_{}/{}.pdf'.format(analysis_dir_count, \
                                             product_function["template_string"]))
-                                pltDict = {"x": x_data_fit[0].tolist(),
-                                       "y": y_data_fit.tolist()}
-                                pltDict["y_fit"] = y_fit_2d.tolist()
+                                pltDict = { "x":        x_data_fit[0].tolist(),
+                                            "y":        y_data_fit.tolist(),
+                                            "y_fit":    y_fit_2d.tolist()}
                                 mat4py.savemat('./output/analysis_{}/{}.mat'.format(analysis_dir_count, \
                                                product_function["template_string"]), pltDict)
                             if visual == True: plt.show()
@@ -454,10 +454,10 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             if save_visual == True:
                                 plt.savefig('./output/analysis_{}/{}.pdf'.format(analysis_dir_count, \
                                             product_function["template_string"]))
-                                pltDict = {"x": x_data_fit[0].tolist(),
-                                       "y": x_data_fit[1].tolist(),
-                                       "z": y_data_fit.tolist()}
-                                pltDict["z_fit"] = y_fit_3d.tolist()
+                                pltDict = { "x":        x_data_fit[0].tolist(),
+                                            "y":        x_data_fit[1].tolist(),
+                                            "z":        y_data_fit.tolist(),
+                                            "z_fit":    y_fit_3d.tolist()}
                                 mat4py.savemat('./output/analysis_{}/{}.mat'.format(analysis_dir_count, \
                                                product_function["template_string"]), pltDict)
                             if visual == True: plt.show()
