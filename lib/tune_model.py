@@ -85,7 +85,9 @@ def tune_model(tuning_parameters, model_function, input_data, output_data):
             population[0, :] = population[member_rank[0]]
             top_heuristic[generation_id] = heuristic[member_rank[0]]
             for member_id in range(1, population_size):
-                parents = np.random.choice(upper_rank, size=2, replace=False)
+                # Allow replacement if upper_rank has fewer than 2 elements
+                replace = len(upper_rank) < 2
+                parents = np.random.choice(upper_rank, size=2, replace=replace)
                 crossover_point = np.random.randint(0,parameter_count)
                 child = np.concatenate((population[parents[0], :crossover_point], population[parents[1], crossover_point:]))
                 population[member_id, :] = child
