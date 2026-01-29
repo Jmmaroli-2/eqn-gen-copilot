@@ -18,6 +18,11 @@ def tune_model(tuning_parameters, model_function, input_data, output_data):
     save_visual = tuning_parameters["save_visual"]
     seed = tuning_parameters["seed"]
     
+    # Validate population size for proper genetic algorithm operation
+    if population_size < 4:
+        raise ValueError(f"GA_population must be at least 4 for proper crossover operation, got {population_size}. "
+                        f"Small populations cannot maintain genetic diversity.")
+    
     np.random.seed(seed)
     
     if save_visual == True:
@@ -85,7 +90,7 @@ def tune_model(tuning_parameters, model_function, input_data, output_data):
             population[0, :] = population[member_rank[0]]
             top_heuristic[generation_id] = heuristic[member_rank[0]]
             for member_id in range(1, population_size):
-                parents = np.random.sample(list(upper_rank), k=2)
+                parents = np.random.choice(upper_rank, size=2, replace=False)
                 crossover_point = np.random.randint(0,parameter_count)
                 child = np.concatenate((population[parents[0], :crossover_point], population[parents[1], crossover_point:]))
                 population[member_id, :] = child
