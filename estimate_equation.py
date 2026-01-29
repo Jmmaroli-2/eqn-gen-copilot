@@ -57,10 +57,12 @@ def estimate_equation(model_parameters, analysis_parameters, input_data, output_
     for c in range(0, len(metrics_v2)):
         if metrics_v2[c]["MAE"] < metrics_v1[c]["MAE"]:
             print("Channel y" + str(c+1) + " improved")
+            print("Using function from masked model")
             model_function_v3.append(model_function_v2[c])
             metrics_v3.append(metrics_v2[c])
         else:
             print("Channel y" + str(c+1) + " did not improve")
+            print("Using function from initial model")
             model_function_v3.append(model_function_v1[c])
             metrics_v3.append(metrics_v1[c])
         print("MAE  : " + str(FORMAT%metrics_v1[c]["MAE"]) + " -> " + str(FORMAT%metrics_v2[c]["MAE"]))
@@ -154,6 +156,9 @@ def estimate_equation(model_parameters, analysis_parameters, input_data, output_
                 print("WARNING: Higher fidelity analysis failed to fit data,")
                 print("         parameter tuning will still be attempted")
                 break
+        print()
+    else:
+        print("Model analysis sufficient, skipping high fidelity analysis.")
         print()
     
     print("Genetic algorithm tuning")
