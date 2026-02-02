@@ -433,6 +433,9 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                                 plt.savefig('./output/analysis_{}/{}.pdf'.format(analysis_dir_count, \
                                             product_function["template_string"]))
                                 with h5py.File('./output/analysis_{}/product_functions.h5'.format(analysis_dir_count), 'a') as f:
+                                    # Delete group if it already exists to avoid conflicts
+                                    if product_function["template_string"] in f:
+                                        del f[product_function["template_string"]]
                                     grp = f.create_group(product_function["template_string"])
                                     grp.create_dataset('x', data=x_sorted)
                                     grp.create_dataset('y', data=y_sorted)
@@ -456,6 +459,9 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                                 plt.savefig('./output/analysis_{}/{}.pdf'.format(analysis_dir_count, \
                                             product_function["template_string"]))
                                 with h5py.File('./output/analysis_{}/product_functions.h5'.format(analysis_dir_count), 'a') as f:
+                                    # Delete group if it already exists to avoid conflicts
+                                    if product_function["template_string"] in f:
+                                        del f[product_function["template_string"]]
                                     grp = f.create_group(product_function["template_string"])
                                     grp.create_dataset('x', data=x_data_fit[0])
                                     grp.create_dataset('y', data=x_data_fit[1])
