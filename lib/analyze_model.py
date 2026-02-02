@@ -432,9 +432,6 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             if save_visual == True:
                                 plt.savefig('./output/analysis_{}/{}.pdf'.format(analysis_dir_count, \
                                             product_function["template_string"]))
-                                pltDict = { "x":        x_sorted.tolist(),
-                                            "y":        y_sorted.tolist(),
-                                            "y_fit":    y_fit_sorted.tolist()}
                                 with h5py.File('./output/analysis_{}/{}.h5'.format(analysis_dir_count, \
                                                product_function["template_string"]), 'w') as f:
                                     f.create_dataset('x', data=x_sorted)
@@ -458,10 +455,6 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             if save_visual == True:
                                 plt.savefig('./output/analysis_{}/{}.pdf'.format(analysis_dir_count, \
                                             product_function["template_string"]))
-                                pltDict = { "x":        x_data_fit[0].tolist(),
-                                            "y":        x_data_fit[1].tolist(),
-                                            "z":        y_data_fit.tolist(),
-                                            "z_fit":    y_fit_3d.tolist()}
                                 with h5py.File('./output/analysis_{}/{}.h5'.format(analysis_dir_count, \
                                                product_function["template_string"]), 'w') as f:
                                     f.create_dataset('x', data=x_data_fit[0])
