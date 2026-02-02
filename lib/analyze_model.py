@@ -437,7 +437,7 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                                     if product_function["template_string"] in f:
                                         del f[product_function["template_string"]]
                                     grp = f.create_group(product_function["template_string"])
-                                    grp.create_dataset('x', data=x_sorted)
+                                    grp.create_dataset('x1', data=x_sorted)
                                     grp.create_dataset('y', data=y_sorted)
                                     grp.create_dataset('y_fit', data=y_fit_sorted)
                             if visual == True: plt.show()
@@ -463,10 +463,10 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                                     if product_function["template_string"] in f:
                                         del f[product_function["template_string"]]
                                     grp = f.create_group(product_function["template_string"])
-                                    grp.create_dataset('x', data=x_data_fit[0])
-                                    grp.create_dataset('y', data=x_data_fit[1])
-                                    grp.create_dataset('z', data=y_data_fit)
-                                    grp.create_dataset('z_fit', data=y_fit_3d)
+                                    grp.create_dataset('x1', data=x_data_fit[0])
+                                    grp.create_dataset('x2', data=x_data_fit[1])
+                                    grp.create_dataset('y', data=y_data_fit)
+                                    grp.create_dataset('y_fit', data=y_fit_3d)
                             if visual == True: plt.show()
                 else:
                     # Handle constant bias at the zero point.
