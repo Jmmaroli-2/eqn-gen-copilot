@@ -449,7 +449,7 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             plt.legend()
                             
                             if save_visual == True:
-                                plt.savefig('./output/analysis_{}/{}.pdf'.format(analysis_dir_count, \
+                                plt.savefig('./output/analysis_{}/plots/{}.pdf'.format(analysis_dir_count, \
                                             product_function["template_string"]))
                             if visual == True: plt.show()
                         if arg_count == 2:
@@ -467,7 +467,7 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             ax.legend()
                             
                             if save_visual == True:
-                                plt.savefig('./output/analysis_{}/{}.pdf'.format(analysis_dir_count, \
+                                plt.savefig('./output/analysis_{}/plots/{}.pdf'.format(analysis_dir_count, \
                                             product_function["template_string"]))
                             if visual == True: plt.show()
                 else:
