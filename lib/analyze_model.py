@@ -410,6 +410,25 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                                 print("Warning: Fit could not be estimated for " + f["txt"] + ",")
                                 print("         " + str(e))
                                 print("")
+                    
+                    # Save HDF5 data for all product functions (decoupled from visualization)
+                    if save_visual == True and len(arg_list) > 0:
+                        # Calculate fitted output for all data points
+                        y_fit = product_function["function"]["fcn"](x_data_fit, *product_function["parameters"])
+                        
+                        with h5py.File('./output/analysis_{}/product_functions.h5'.format(analysis_dir_count), 'a') as f:
+                            # Delete group if it already exists to avoid conflicts
+                            if product_function["template_string"] in f:
+                                del f[product_function["template_string"]]
+                            grp = f.create_group(product_function["template_string"])
+                            
+                            # Save each input as x1, x2, x3, etc.
+                            for i in range(arg_count):
+                                grp.create_dataset('x{}'.format(i+1), data=x_data_fit[i])
+                            
+                            # Save output and fitted output
+                            grp.create_dataset('y', data=y_data_fit)
+                            grp.create_dataset('y_fit', data=y_fit)
                                 
                     # Plot 2D and 3D data with fitted function for visual inspection.
                     if (save_visual == True or visual == True):
@@ -432,14 +451,6 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             if save_visual == True:
                                 plt.savefig('./output/analysis_{}/{}.pdf'.format(analysis_dir_count, \
                                             product_function["template_string"]))
-                                with h5py.File('./output/analysis_{}/product_functions.h5'.format(analysis_dir_count), 'a') as f:
-                                    # Delete group if it already exists to avoid conflicts
-                                    if product_function["template_string"] in f:
-                                        del f[product_function["template_string"]]
-                                    grp = f.create_group(product_function["template_string"])
-                                    grp.create_dataset('x1', data=x_sorted)
-                                    grp.create_dataset('y', data=y_sorted)
-                                    grp.create_dataset('y_fit', data=y_fit_sorted)
                             if visual == True: plt.show()
                         if arg_count == 2:
                             plt.figure()
@@ -458,15 +469,6 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             if save_visual == True:
                                 plt.savefig('./output/analysis_{}/{}.pdf'.format(analysis_dir_count, \
                                             product_function["template_string"]))
-                                with h5py.File('./output/analysis_{}/product_functions.h5'.format(analysis_dir_count), 'a') as f:
-                                    # Delete group if it already exists to avoid conflicts
-                                    if product_function["template_string"] in f:
-                                        del f[product_function["template_string"]]
-                                    grp = f.create_group(product_function["template_string"])
-                                    grp.create_dataset('x1', data=x_data_fit[0])
-                                    grp.create_dataset('x2', data=x_data_fit[1])
-                                    grp.create_dataset('y', data=y_data_fit)
-                                    grp.create_dataset('y_fit', data=y_fit_3d)
                             if visual == True: plt.show()
                 else:
                     # Handle constant bias at the zero point.
