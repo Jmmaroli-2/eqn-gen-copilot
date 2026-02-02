@@ -74,6 +74,7 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
         while os.path.exists('./output/analysis_{}'.format(analysis_dir_count)):
             analysis_dir_count = analysis_dir_count + 1
         os.mkdir('./output/analysis_{}'.format(analysis_dir_count))
+        os.mkdir('./output/analysis_{}/plots'.format(analysis_dir_count))
 
     # Generate every possible combination of impulses.
     if history < history_eff:
@@ -420,15 +421,15 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             # Delete group if it already exists to avoid conflicts
                             if product_function["template_string"] in f:
                                 del f[product_function["template_string"]]
-                            grp = f.create_group(product_function["template_string"])
+                            fcn_grp = f.create_group(product_function["template_string"])
                             
                             # Save each input as x1, x2, x3, etc.
                             for i in range(arg_count):
-                                grp.create_dataset('x{}'.format(i+1), data=x_data_fit[i])
+                                fcn_grp.create_dataset('x{}'.format(i+1), data=x_data_fit[i])
                             
                             # Save output and fitted output
-                            grp.create_dataset('y', data=y_data_fit)
-                            grp.create_dataset('y_fit', data=y_fit)
+                            fcn_grp.create_dataset('y', data=y_data_fit)
+                            fcn_grp.create_dataset('y_fit', data=y_fit)
                                 
                     # Plot 2D and 3D data with fitted function for visual inspection.
                     if save_visual or visual:
