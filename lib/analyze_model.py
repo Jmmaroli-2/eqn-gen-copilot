@@ -535,13 +535,12 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
         if verbose: print("System equation")
         if verbose: print("============================================================")
         # Print the function template for the current output channel.
-        y_str = "y" + str(channel_id+1) + "[k] = "
+        y_str_template = "y" + str(channel_id+1) + "[k] = "
         for idf, product_function in enumerate(channel_function):
-            y_str = y_str + product_function["template_string"]
+            y_str_template = y_str_template + product_function["template_string"]
             if idf < len(channel_function) - 1:
-                y_str = y_str + " + "
-        print(y_str)
-        y_str_template = y_str
+                y_str_template = y_str_template + " + "
+        print(y_str_template)
         y_str = "y" + str(channel_id+1) + "[k] = "
         for idf, product_function in enumerate(channel_function):
             if product_function["estimate_string"] != None:
