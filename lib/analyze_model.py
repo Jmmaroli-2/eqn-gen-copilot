@@ -13,7 +13,7 @@ import pyprind # Progress bar
 import torch
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-import mat4py
+import h5py
 import os
 
 from lib.evaluate_function import evaluate_function
@@ -435,8 +435,11 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                                 pltDict = { "x":        x_sorted.tolist(),
                                             "y":        y_sorted.tolist(),
                                             "y_fit":    y_fit_sorted.tolist()}
-                                mat4py.savemat('./output/analysis_{}/{}.mat'.format(analysis_dir_count, \
-                                               product_function["template_string"]), pltDict)
+                                with h5py.File('./output/analysis_{}/{}.h5'.format(analysis_dir_count, \
+                                               product_function["template_string"]), 'w') as f:
+                                    f.create_dataset('x', data=x_sorted)
+                                    f.create_dataset('y', data=y_sorted)
+                                    f.create_dataset('y_fit', data=y_fit_sorted)
                             if visual == True: plt.show()
                         if arg_count == 2:
                             plt.figure()
@@ -459,8 +462,12 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                                             "y":        x_data_fit[1].tolist(),
                                             "z":        y_data_fit.tolist(),
                                             "z_fit":    y_fit_3d.tolist()}
-                                mat4py.savemat('./output/analysis_{}/{}.mat'.format(analysis_dir_count, \
-                                               product_function["template_string"]), pltDict)
+                                with h5py.File('./output/analysis_{}/{}.h5'.format(analysis_dir_count, \
+                                               product_function["template_string"]), 'w') as f:
+                                    f.create_dataset('x', data=x_data_fit[0])
+                                    f.create_dataset('y', data=x_data_fit[1])
+                                    f.create_dataset('z', data=y_data_fit)
+                                    f.create_dataset('z_fit', data=y_fit_3d)
                             if visual == True: plt.show()
                 else:
                     # Handle constant bias at the zero point.
