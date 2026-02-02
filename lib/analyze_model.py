@@ -412,7 +412,7 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                                 print("")
                     
                     # Save HDF5 data for all product functions (decoupled from visualization)
-                    if save_visual == True and len(arg_list) > 0:
+                    if save_visual and arg_count > 0:
                         # Calculate fitted output for all data points
                         y_fit = product_function["function"]["fcn"](x_data_fit, *product_function["parameters"])
                         
