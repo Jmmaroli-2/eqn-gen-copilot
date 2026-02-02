@@ -74,7 +74,6 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
         while os.path.exists('./output/analysis_{}'.format(analysis_dir_count)):
             analysis_dir_count = analysis_dir_count + 1
         os.mkdir('./output/analysis_{}'.format(analysis_dir_count))
-        os.mkdir('./output/analysis_{}/plots'.format(analysis_dir_count))
 
     # Generate every possible combination of impulses.
     if history < history_eff:
@@ -418,10 +417,10 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                         y_fit = product_function["function"]["fcn"](x_data_fit, *product_function["parameters"])
                         
                         with h5py.File('./output/analysis_{}/product_functions.h5'.format(analysis_dir_count), 'a') as f:
-                            # Delete group if it already exists to avoid conflicts
-                            if product_function["template_string"] in f:
-                                del f[product_function["template_string"]]
-                            fcn_grp = f.create_group(product_function["template_string"])
+                            # Create a group for the channel if it doesn't exist
+                            channel_grp = f.require_group(f'y{channel_id + 1}')
+                            # Create a group for the product function
+                            fcn_grp = channel_grp.create_group(product_function["template_string"])
                             
                             # Save each input as x1, x2, x3, etc.
                             for i in range(arg_count):
@@ -432,7 +431,10 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             fcn_grp.create_dataset('y_fit', data=y_fit)
                                 
                     # Plot 2D and 3D data with fitted function for visual inspection.
-                    if save_visual or visual:
+                    if (save_visual or visual) and (arg_count == 1 or arg_count == 2):
+                        visual_dir = './output/analysis_{}/y{}_visuals'.format(analysis_dir_count, channel_id+1)
+                        os.makedirs(visual_dir, exist_ok=True)
+                        
                         if arg_count == 1:
                             plt.figure()
                             # Plot response data
@@ -449,10 +451,6 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             plt.xlabel(f_list[0])
                             plt.legend()
                             
-                            if save_visual == True:
-                                plt.savefig('./output/analysis_{}/plots/{}.pdf'.format(analysis_dir_count, \
-                                            product_function["template_string"]))
-                            if visual == True: plt.show()
                         if arg_count == 2:
                             plt.figure()
                             # Plot the response data
@@ -467,10 +465,9 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             ax.set_ylabel(f_list[1])
                             ax.legend()
                             
-                            if save_visual == True:
-                                plt.savefig('./output/analysis_{}/plots/{}.pdf'.format(analysis_dir_count, \
-                                            product_function["template_string"]))
-                            if visual == True: plt.show()
+                        if save_visual == True:
+                                plt.savefig('{}/{}.pdf'.format(visual_dir, product_function["template_string"]))
+                        if visual == True: plt.show()
                 else:
                     # Handle constant bias at the zero point.
                     channel_bias = bias[0, channel_id].detach().numpy()
