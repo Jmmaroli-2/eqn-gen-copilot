@@ -432,11 +432,11 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             if save_visual == True:
                                 plt.savefig('./output/analysis_{}/{}.pdf'.format(analysis_dir_count, \
                                             product_function["template_string"]))
-                                with h5py.File('./output/analysis_{}/{}.h5'.format(analysis_dir_count, \
-                                               product_function["template_string"]), 'w') as f:
-                                    f.create_dataset('x', data=x_sorted)
-                                    f.create_dataset('y', data=y_sorted)
-                                    f.create_dataset('y_fit', data=y_fit_sorted)
+                                with h5py.File('./output/analysis_{}/product_functions.h5'.format(analysis_dir_count), 'a') as f:
+                                    grp = f.create_group(product_function["template_string"])
+                                    grp.create_dataset('x', data=x_sorted)
+                                    grp.create_dataset('y', data=y_sorted)
+                                    grp.create_dataset('y_fit', data=y_fit_sorted)
                             if visual == True: plt.show()
                         if arg_count == 2:
                             plt.figure()
@@ -455,12 +455,12 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             if save_visual == True:
                                 plt.savefig('./output/analysis_{}/{}.pdf'.format(analysis_dir_count, \
                                             product_function["template_string"]))
-                                with h5py.File('./output/analysis_{}/{}.h5'.format(analysis_dir_count, \
-                                               product_function["template_string"]), 'w') as f:
-                                    f.create_dataset('x', data=x_data_fit[0])
-                                    f.create_dataset('y', data=x_data_fit[1])
-                                    f.create_dataset('z', data=y_data_fit)
-                                    f.create_dataset('z_fit', data=y_fit_3d)
+                                with h5py.File('./output/analysis_{}/product_functions.h5'.format(analysis_dir_count), 'a') as f:
+                                    grp = f.create_group(product_function["template_string"])
+                                    grp.create_dataset('x', data=x_data_fit[0])
+                                    grp.create_dataset('y', data=x_data_fit[1])
+                                    grp.create_dataset('z', data=y_data_fit)
+                                    grp.create_dataset('z_fit', data=y_fit_3d)
                             if visual == True: plt.show()
                 else:
                     # Handle constant bias at the zero point.
