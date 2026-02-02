@@ -295,7 +295,8 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                     "function": dct_empty,
                     "shift": []
                 }
-                if len(arg_list) > 0:
+                arg_count = len(arg_list)
+                if arg_count > 0:
                     # Obtain sample points for curve fitting.
                     x_data = np.zeros([sweep_detailed, input_channels, history])
                     y_data = np.zeros([sweep_detailed, output_channels])
@@ -322,7 +323,6 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                         y_data = y_data - contribution
                     
                     # Format data for curve fitting
-                    arg_count = len(arg_list)
                     x_data_fit = np.zeros([arg_count, sweep_detailed])
                     y_data_fit = np.zeros([sweep_detailed])
                     arg = 0
@@ -411,8 +411,8 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                                 print("         " + str(e))
                                 print("")
                     
-                    # Save HDF5 data for all product functions (decoupled from visualization)
-                    if save_visual and arg_count > 0:
+                    # Save HDF5 data for all product functions.
+                    if save_visual:
                         # Calculate fitted output for all data points
                         y_fit = product_function["function"]["fcn"](x_data_fit, *product_function["parameters"])
                         
@@ -431,7 +431,7 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             grp.create_dataset('y_fit', data=y_fit)
                                 
                     # Plot 2D and 3D data with fitted function for visual inspection.
-                    if (save_visual == True or visual == True):
+                    if save_visual or visual:
                         if arg_count == 1:
                             plt.figure()
                             # Plot response data
