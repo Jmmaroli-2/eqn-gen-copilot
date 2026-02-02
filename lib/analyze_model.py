@@ -541,6 +541,7 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
             if idf < len(channel_function) - 1:
                 y_str = y_str + " + "
         print(y_str)
+        y_str_template = y_str
         y_str = "y" + str(channel_id+1) + "[k] = "
         for idf, product_function in enumerate(channel_function):
             if product_function["estimate_string"] != None:
@@ -549,6 +550,14 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                     y_str = y_str + " + "
         print(y_str)
         print()
+        
+        # Save the completed equation to a file in the analysis directory.
+        if save_visual == True:
+            equation_file_path = './output/analysis_{}/system_equation.txt'.format(analysis_dir_count)
+            with open(equation_file_path, 'a') as f:
+                f.write(y_str_template + '\n')
+                f.write(y_str + '\n')
+                f.write('\n')
         
         model_function.append(channel_function)
                 
