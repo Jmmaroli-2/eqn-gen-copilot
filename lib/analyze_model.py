@@ -420,6 +420,7 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             # Plot the fitted function
                             x_sorted_indices = np.argsort(x_data_fit[0])
                             x_sorted = x_data_fit[0][x_sorted_indices]
+                            y_sorted = y_data_fit[x_sorted_indices]
                             y_fit_2d = product_function["function"]["fcn"](x_data_fit, *product_function["parameters"])
                             y_fit_sorted = y_fit_2d[x_sorted_indices]
                             plt.plot(x_sorted, y_fit_sorted, 'r-', linewidth=2, label='Fitted function')
@@ -431,9 +432,9 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             if save_visual == True:
                                 plt.savefig('./output/analysis_{}/{}.pdf'.format(analysis_dir_count, \
                                             product_function["template_string"]))
-                                pltDict = { "x":        x_data_fit[0].tolist(),
-                                            "y":        y_data_fit.tolist(),
-                                            "y_fit":    y_fit_2d.tolist()}
+                                pltDict = { "x":        x_sorted.tolist(),
+                                            "y":        y_sorted.tolist(),
+                                            "y_fit":    y_fit_sorted.tolist()}
                                 mat4py.savemat('./output/analysis_{}/{}.mat'.format(analysis_dir_count, \
                                                product_function["template_string"]), pltDict)
                             if visual == True: plt.show()
