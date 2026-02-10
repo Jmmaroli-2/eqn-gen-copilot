@@ -13,7 +13,7 @@ import pyprind # Progress bar
 import torch
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-import mat4py
+import h5py
 import os
 
 from lib.evaluate_function import evaluate_function
@@ -295,7 +295,8 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                     "function": dct_empty,
                     "shift": []
                 }
-                if len(arg_list) > 0:
+                arg_count = len(arg_list)
+                if arg_count > 0:
                     # Obtain sample points for curve fitting.
                     x_data = np.zeros([sweep_detailed, input_channels, history])
                     y_data = np.zeros([sweep_detailed, output_channels])
@@ -322,7 +323,6 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                         y_data = y_data - contribution
                     
                     # Format data for curve fitting
-                    arg_count = len(arg_list)
                     x_data_fit = np.zeros([arg_count, sweep_detailed])
                     y_data_fit = np.zeros([sweep_detailed])
                     arg = 0
@@ -410,9 +410,31 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                                 print("Warning: Fit could not be estimated for " + f["txt"] + ",")
                                 print("         " + str(e))
                                 print("")
+                    
+                    # Save HDF5 data for all product functions.
+                    if save_visual:
+                        # Calculate fitted output for all data points
+                        y_fit = product_function["function"]["fcn"](x_data_fit, *product_function["parameters"])
+                        
+                        with h5py.File('./output/analysis_{}/product_functions.h5'.format(analysis_dir_count), 'a') as f:
+                            # Create a group for the channel if it doesn't exist
+                            channel_grp = f.require_group(f'y{channel_id + 1}')
+                            # Create a group for the product function
+                            fcn_grp = channel_grp.create_group(product_function["template_string"])
+                            
+                            # Save each input as x1, x2, x3, etc.
+                            for i in range(arg_count):
+                                fcn_grp.create_dataset('x{}'.format(i+1), data=x_data_fit[i])
+                            
+                            # Save output and fitted output
+                            fcn_grp.create_dataset('y', data=y_data_fit)
+                            fcn_grp.create_dataset('y_fit', data=y_fit)
                                 
                     # Plot 2D and 3D data with fitted function for visual inspection.
-                    if (save_visual == True or visual == True):
+                    if (save_visual or visual) and (arg_count == 1 or arg_count == 2):
+                        visual_dir = './output/analysis_{}/y{}_visuals'.format(analysis_dir_count, channel_id+1)
+                        os.makedirs(visual_dir, exist_ok=True)
+                        
                         if arg_count == 1:
                             plt.figure()
                             # Plot response data
@@ -429,15 +451,6 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             plt.xlabel(f_list[0])
                             plt.legend()
                             
-                            if save_visual == True:
-                                plt.savefig('./output/analysis_{}/{}.pdf'.format(analysis_dir_count, \
-                                            product_function["template_string"]))
-                                pltDict = { "x":        x_sorted.tolist(),
-                                            "y":        y_sorted.tolist(),
-                                            "y_fit":    y_fit_sorted.tolist()}
-                                mat4py.savemat('./output/analysis_{}/{}.mat'.format(analysis_dir_count, \
-                                               product_function["template_string"]), pltDict)
-                            if visual == True: plt.show()
                         if arg_count == 2:
                             plt.figure()
                             # Plot the response data
@@ -452,16 +465,9 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
                             ax.set_ylabel(f_list[1])
                             ax.legend()
                             
-                            if save_visual == True:
-                                plt.savefig('./output/analysis_{}/{}.pdf'.format(analysis_dir_count, \
-                                            product_function["template_string"]))
-                                pltDict = { "x":        x_data_fit[0].tolist(),
-                                            "y":        x_data_fit[1].tolist(),
-                                            "z":        y_data_fit.tolist(),
-                                            "z_fit":    y_fit_3d.tolist()}
-                                mat4py.savemat('./output/analysis_{}/{}.mat'.format(analysis_dir_count, \
-                                               product_function["template_string"]), pltDict)
-                            if visual == True: plt.show()
+                        if save_visual == True:
+                                plt.savefig('{}/{}.pdf'.format(visual_dir, product_function["template_string"]))
+                        if visual == True: plt.show()
                 else:
                     # Handle constant bias at the zero point.
                     channel_bias = bias[0, channel_id].detach().numpy()
@@ -528,21 +534,53 @@ def analyze_model(analysis_parameters, model_dictionary, input_data, output_data
         # Print the completed equation for the current output channel.     
         if verbose: print("System equation")
         if verbose: print("============================================================")
-        # Print the function template for the current output channel.
-        y_str = "y" + str(channel_id+1) + "[k] = "
+        # Initialize strings for equations
+        y_str_template = "y" + str(channel_id+1) + "[k] = "
+        y_str_estimate = "y" + str(channel_id+1) + "[k] = "
+
+        # Build the equations term by term
         for idf, product_function in enumerate(channel_function):
-            y_str = y_str + product_function["template_string"]
+            template = product_function["template_string"]
+            estimate = product_function["estimate_string"] if product_function["estimate_string"] is not None else "0"
+
+            # Append to the main template equation
+            y_str_template += template
+            # Append to the main estimate equation
+            y_str_estimate += estimate
+
+            # Add " + " if not the last term
             if idf < len(channel_function) - 1:
-                y_str = y_str + " + "
-        print(y_str)
-        y_str = "y" + str(channel_id+1) + "[k] = "
-        for idf, product_function in enumerate(channel_function):
-            if product_function["estimate_string"] != None:
-                y_str = y_str + product_function["estimate_string"]
-                if idf < len(channel_function) - 1:
-                    y_str = y_str + " + "
-        print(y_str)
+                y_str_template += " + "
+                y_str_estimate += " + "
+
+        # Print template equation
+        print(y_str_template)
         print()
+
+        # Print template-to-estimate mapping
+        for product_function in channel_function:
+            template = product_function["template_string"]
+            estimate = product_function["estimate_string"] if product_function["estimate_string"] is not None else "0"
+            print(f"{template} = {estimate}")
+            
+        # Print estimate equation
+        print()
+        print(y_str_estimate)
+        print()
+
+        # Save to file if needed
+        if save_visual:
+            equation_file_path = './output/analysis_{}/system_equation.txt'.format(analysis_dir_count)
+            with open(equation_file_path, 'a') as f:
+                f.write(y_str_template + '\n')
+                f.write('\n')
+                for product_function in channel_function:
+                    template = product_function["template_string"]
+                    estimate = product_function["estimate_string"] if product_function["estimate_string"] is not None else "0"
+                    f.write(f"{template} = {estimate}\n")
+                f.write('\n')
+                f.write(y_str_estimate + '\n')
+                f.write('\n')
         
         model_function.append(channel_function)
                 
