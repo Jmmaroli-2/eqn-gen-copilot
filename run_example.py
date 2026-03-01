@@ -80,7 +80,7 @@ if __name__ == "__main__":
             input_data[i, 1] = y_k1
             input_data[i-1, 1] = y_k2
             
-            output_data[i, 0] = -0.5*u_k1 + 0.5*pow(y_k2,2) + 0.5*u_k0*y_k1
+            output_data[i, 0] = -0.5*u_k1 + 0.5*y_k2**2 + 0.5*u_k0*y_k1
             
     elif EXAMPLE == 1:
         # Verbose example extension.
@@ -103,7 +103,7 @@ if __name__ == "__main__":
             input_data[i, 1] = y_k1
             input_data[i-1, 1] = y_k2
             
-            output_data[i, 0] = -0.5*u_k1 + 0.5*pow(y_k2,2) + 0.5*u_k0*y_k1
+            output_data[i, 0] = -0.5*u_k1 + 0.5*y_k2**2 + 0.5*u_k0*y_k1
             
     elif EXAMPLE == 2:
         # Process noise resiliance.
@@ -130,10 +130,10 @@ if __name__ == "__main__":
             # Range of 0.00 - 0.16 tested, system unstable at 0.17
             error[i] = np.random.normal(0.0,0.16)
             
-            output_data[i, 0] = -0.5*u_k1 + 0.5*pow(y_k2,2) + 0.5*u_k0*y_k1 + error[i]
+            output_data[i, 0] = -0.5*u_k1 + 0.5*y_k2**2 + 0.5*u_k0*y_k1 + error[i]
             
         e_mae = sum(abs(error))/25000
-        e_mse = np.mean(pow(error,2))
+        e_mse = np.mean(error**2)
         e_rmse = np.sqrt(e_mse)
         
         print("Noise Metrics")
@@ -166,17 +166,17 @@ if __name__ == "__main__":
             input_data[i-1, 1] = y_k2
             error[i] = np.random.normal(0.0,2.2)
             
-            output_data[i, 0] = -0.5*u_k1 + 0.5*pow(y_k2,2) + 0.5*u_k0*y_k1
+            output_data[i, 0] = -0.5*u_k1 + 0.5*y_k2**2 + 0.5*u_k0*y_k1
 
         # Error is added after system calculation.
         output_data[:,0] = output_data[:,0] + error
         
         e_mae = sum(abs(error))/25000
-        e_mse = np.mean(pow(error,2))
+        e_mse = np.mean(error**2)
         e_rmse = np.sqrt(e_mse)
         
         o_mae = sum(abs(output_data[:,0]))/25000
-        o_mse = np.mean(pow(output_data[:,0],2))
+        o_mse = np.mean(output_data[:,0]**2)
         o_rmse = np.sqrt(o_mse)
         
         print("Noise Metrics")
@@ -269,7 +269,7 @@ if __name__ == "__main__":
             u_k0 = input_data[i, 0]
             u_k1 = input_data[i-1, 0]
             
-            output_data[i, 0] = pow(u_k0,2)
+            output_data[i, 0] = u_k0**2
             
     elif EXAMPLE == 8:
         # Higher dimensional product functions.
